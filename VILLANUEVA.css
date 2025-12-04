@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Layout — Version 1 (Minimal)</title>
+<style>
+  :root{
+    --bg:#f7f8fb; --card:#fff; --accent:#2b6cb0; --muted:#666;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:Inter, system-ui, Arial; background:var(--bg); color:#222;
+  }
+  header{
+    height:64px; display:flex; align-items:center; padding:0 20px;
+    border-bottom:1px solid #e6e9ef; background:linear-gradient(90deg,#fff, #fbfdff);
+  }
+  header .logo{font-weight:700; color:var(--accent); font-size:20px}
+  .app{
+    display:grid; grid-template-columns:260px 1fr; gap:0; height:calc(100vh - 64px);
+  }
+  nav{
+    border-right:1px solid #e6e9ef; padding:20px; background:transparent;
+  }
+  .menu-title{font-weight:600; margin-bottom:12px}
+  .menu-list{list-style:none; padding:0; margin:0}
+  .menu-list li{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:6px;
+    color:var(--muted); margin-bottom:6px; cursor:pointer;
+  }
+  .menu-list li:hover{background:#eef5ff; color:var(--accent)}
+  .menu-list li.active{background:var(--accent); color:white}
+  main{
+    padding:28px; background:transparent; overflow:auto;
+  }
+  .card{background:var(--card); border-radius:8px; padding:18px; box-shadow:0 1px 2px rgba(10,10,20,.04)}
+  h1{margin:0 0 12px 0; font-size:20px}
+  .center-msg{display:flex; align-items:center; justify-content:center; height:320px; color:#999; font-size:20px}
+  /* profile/create styles */
+  .profile-header{display:flex; justify-content:space-between; align-items:center}
+  .btn{
+    background:var(--accent); color:white; padding:8px 12px; border-radius:6px; border:0; cursor:pointer;
+  }
+  .form-row{margin:8px 0}
+  input, textarea{width:100%; padding:8px; border:1px solid #e1e6ef; border-radius:6px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">MyApp</div>
+</header>
+
+<div class="app">
+  <nav>
+    <div class="menu-title">Dashboard</div>
+    <ul class="menu-list" id="menu">
+      <li data-section="dash" class="active">1 — Overview</li>
+      <li data-section="item2">2 — Reports</li>
+      <li data-section="item3">3 — Analytics</li>
+      <li data-section="item4">4 — Settings</li>
+      <li data-section="profile">5 — Profile</li>
+    </ul>
+  </nav>
+
+  
+
+<script>
+  const menu = document.getElementById('menu');
+  menu.addEventListener('click', e => {
+    const li = e.target.closest('li');
+    if(!li) return;
+    [...menu.querySelectorAll('li')].forEach(n=>n.classList.remove('active'));
+    li.classList.add('active');
+    showSection(li.dataset.section);
+  });
+
+  function showSection(name){
+    // hide all sections in main
+    const main = document.getElementById('content');
+    [...main.querySelectorAll('.card')].forEach(c=>c.style.display = 'none');
+    const target = document.getElementById(name) || document.getElementById('dash');
+    target.style.display = 'block';
+    // hide create form whenever switching
+    const cf = document.getElementById('createForm'); if(cf) cf.style.display='none';
+  }
+
+  // Create button behaviour
+  document.getElementById('createBtn').addEventListener('click', ()=>{
+    const cf = document.getElementById('createForm');
+    cf.style.display = cf.style.display === 'block' ? 'none' : 'block';
+  });
+
+  function submitFake(){
+    alert('Saved (static demo).');
+    document.getElementById('createForm').style.display='none';
+  }
+</script>
+</body>
+</html>
